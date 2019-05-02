@@ -4,7 +4,7 @@ import Layout from './components/Layout';
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <Layout title="My_Chat_App"></Layout>
     </div>
   );

@@ -12,10 +12,11 @@ textarea {
 }
 .login {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #5194bb;
 }
 .login-form {
   display: flex;
@@ -30,32 +31,35 @@ textarea {
   height: 20px;
   line-height: 20px;
   font-size: 20px;
-  border-bottom: solid 2px #ff8080;
+  border-bottom: solid 2px  #145981;
   transition: all 0.23s ease-in;
 }
 .login-form input:focus {
-  border-bottom: solid 2px #ff3333;
+  border-bottom: solid 2px #145981;
   outline: none;
 }
 .login-form .error {
   text-align: center;
   margin: 5px 0;
   padding: 5px 10px;
-  color: #c92c43;
+  color: #f56076;
+}
+#nickname{
+  background-color: #5194bb;
 }
 .container {
   color: #ffe6e6;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  height: 100%;
+  height: 100vh;
   width: 100%;
 }
 #side-bar {
   box-sizing: border-box;
   width: 33.75%;
-  height: 100%;
-  /* display: flex; */
+  height: 100vh;
+  display: flex;
   justify-content: space-around;
   flex-direction: column;
 }
@@ -68,10 +72,10 @@ textarea {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  background: #2e2e4f;
+  background:  #2185be
 }
 #side-bar .search {
-  background: #3e3e5e;
+  background: #145981;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -91,17 +95,17 @@ textarea {
 }
 #side-bar .search input {
   width: 100%;
-  background: #3e3e5e;
+  background:  #145981;
   flex-grow: 1;
   box-sizing: border-box;
   border: none;
-  color: #b9b6b9;
+  color: #efefef;
 }
 #side-bar .search input:focus {
   outline: none;
 }
 #side-bar .search input::placeholder {
-  color: #cac8ee;
+  color: #efefef;
   opacity: 0.6;
 }
 #side-bar .search .plus {
@@ -115,7 +119,7 @@ textarea {
 #side-bar .search .plus::before {
   content: "";
   position: absolute;
-  background: #b3b2ca;
+  background: #efefef;
 }
 #side-bar .search .plus::after {
   width: 16px;
@@ -130,19 +134,19 @@ textarea {
 }
 #side-bar .users {
   overflow-y: scroll;
-  background: #3e3e5e;
+  background:  #145981;
   flex-grow: 1;
 }
 #side-bar .users::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #cac8ee;
+  background-color: #2185be;
 }
 #side-bar .users::-webkit-scrollbar {
   width: 5px;
-  background-color: green;
+  background-color:  #2185be;
 }
 #side-bar .users::-webkit-scrollbar-thumb {
-  background-color: #484d79;
+  background-color:  #2185be;
 }
 #side-bar .users .user {
   align-items: center;
@@ -153,7 +157,7 @@ textarea {
 }
 #side-bar .users .user.active,
 #side-bar .users .user:hover {
-  background: #2e2e4f;
+  background: #2185be;
 }
 #side-bar .users .user:hover:not(.active) {
   cursor: pointer;
@@ -174,7 +178,7 @@ textarea {
 }
 #side-bar .current-user {
   align-items: center;
-  background: #484d79;
+  background:   #2185be;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -191,8 +195,31 @@ textarea {
   justify-content: center;
   font-size: 2em;
 }
+.side-bar-select {
+  float: left; 
+  background:  #145981;
+  border: none;
+  color: white;
+  padding:  15px ;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;  
+  cursor: pointer;
+ 
+}
+.side-bar-select .true{
+  
+  background: #2185be; 
+  color: #e2ebf5;
+}
+.side-bar-select .false{
+
+  background:  #145981;
+  color: #e2ebf5;
+}
+
 .chat-header {
-  background: #5d5d8a;
+  background:  #2185be;
   box-shadow: 0px 6px 5px -2px rgba(225, 225, 225, 0.7);
   box-sizing: border-box;
   display: flex;
@@ -241,7 +268,7 @@ textarea {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
+  height: 100vh;
   width: 100%;
 }
 .chat-room.choose {
@@ -256,14 +283,14 @@ textarea {
 }
 .thread-container::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #cac8ee;
+  background-color: #e2ebf5;
 }
 .thread-container::-webkit-scrollbar {
   width: 5px;
-  background-color: green;
+  background-color:#145981;
 }
 .thread-container::-webkit-scrollbar-thumb {
-  background-color: #484d79;
+  background-color:#145981;
 }
 .thread-container .thread {
   position: relative;
@@ -272,8 +299,8 @@ textarea {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  color: #b3b2ca;
-  background: #dcddf5;
+  color: #12699b;
+  background: #e6eaee;
 }
 .message-container {
   display: flex;
@@ -300,7 +327,7 @@ textarea {
   border-radius: 5px;
   border-top-left-radius: 0;
   box-sizing: border-box;
-  color: #b3b2ca;
+  color: #1a73a7;
   height: 100%;
   padding: 10px 15px;
   position: relative;
@@ -343,14 +370,14 @@ textarea {
   display: none;
 }
 .message-container.right .message {
-  background: #89a1fc;
+  background: #2185be;;
   color: #fff;
   border-top-right-radius: 0;
   border-top-left-radius: 5px;
 }
 .message-container.right .message::before {
-  border-top-color: #89a1fc;
-  border-left-color: #89a1fc;
+  border-top-color: #2185be;
+  border-left-color: #2185be;
   border-right-color: transparent;
   left: auto;
   right: -7px;
@@ -361,7 +388,7 @@ textarea {
 }
 .message-input {
   background: white;
-  color: #484d79;
+  color:  #2185be;;
   box-sizing: border-box;
   height: 10vh;
   max-height: 65px;
@@ -388,10 +415,10 @@ textarea {
 }
 .message-input .message-form .form-control::-webkit-scrollbar {
   width: 5px;
-  background-color: green;
+  background-color: #2185be;
 }
 .message-input .message-form .form-control::-webkit-scrollbar-thumb {
-  background-color: #484d79;
+  background-color: #2185be;
 }
 .message-input .message-form .form-control:focus {
   outline: none;
@@ -404,11 +431,11 @@ textarea {
   border: none;
   height: 100%;
   color: #fff;
-  background: #3e3e5e;
+  background:  #2185be;
   transition: all 0.35s ease-out;
 }
 .message-input .message-form .send:disabled {
-  opacity: 0.2;
-  background: #5d5d8a;
+  opacity: 0.7;
+  background:  #2185be;
 }
 /*# sourceMappingURL=index.css.map */

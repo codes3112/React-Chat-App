@@ -24,16 +24,20 @@ const createMessage = ({message = '', sender = ''} = { })=>(
 )
 
 //create chat
-const createChat = ({messages = [], name = "OnlineUsers", users = []} = {})=>(
+const createChat = ({messages = [], name = "OnlineUsers", users = [],isOnlineUser = false } = {})=>(
 	{
 		id:uuidv4(),
-		name,
+		name :isOnlineUser ? 'OnlineChat' : createChatNameFromUsers(users),
 		messages,
 		users,
-		typingUsers:[]
+		typingUsers:[],
+		isOnlineUser
 	}
 )
-
+//create group name
+const createChatNameFromUsers = (users, excludedUser = "") =>{
+	return users.filter(u => u!== excludedUser).join(' & ') || 'No Users'
+}
 //getDate
 //returns time in 24 hr format '11:30'
 
@@ -44,5 +48,6 @@ const getTime = (date) => {
 module.exports = {
 	createMessage,
 	createChat,
-	createUser
+	createUser,
+	createChatNameFromUsers
 }

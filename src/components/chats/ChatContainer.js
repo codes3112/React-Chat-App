@@ -1,23 +1,37 @@
 import React, { Component } from 'react';
-import SideBar from './SideBar';
-import {ONLINE_CHAT, MESSAGE_SENT, MESSAGE_RECEIVED, TYPING, PRIVATE_MESSAGE} from '../../Events';
+import SideBar from '../sidebar/SideBar';
+import {ONLINE_CHAT, MESSAGE_SENT, MESSAGE_RECEIVED, TYPING, 
+			  PRIVATE_MESSAGE, USER_CONNECTED, USER_DISCONNECTED} from '../../Events';
 import ChatHeading from './ChatHeading'
 import Messages from '../messages/Messages'
 import MessageInput from '../messages/MessageInput'
+import { values } from 'lodash'
 
 export default class ChatContainer extends Component {
     constructor(props){
         super(props);
 	
 	    this.state = {
-	  	chats:[],
+			chats:[],
+			users : [],
 	  	activeChat:null
 	  };
   }
   componentDidMount() {
     const { socket} = this.props;
 		this.initSocket(socket);
-  }
+	}
+
+	//to logout and disconnect and reset the state
+	componentWillUnmount() {
+		const { socket } = this.props;
+		socket.off(PRIVATE_MESSAGE);
+		socket.off(USER_CONNECTED);
+		socket.off(USER_DISCONNECTED);
+	}
+
+	// initialize the socket
+	
   initSocket(socket){
 		
 		socket.emit(ONLINE_CHAT, this.resetChat);
@@ -25,12 +39,20 @@ export default class ChatContainer extends Component {
 		socket.on('connect', () =>{
 		socket.emit(ONLINE_CHAT, this.resetChat)
 		})
+		//receive the users object of connected users from the server
+		socket.on(USER_CONNECTED, (users) =>{
+			this.setState({ users:values(users) });
+		})
+		socket.on(USER_DISCONNECTED, (users) =>{
+			this.setState({ users:values(users) });
+		})
 		
 	}
 	//send open private message
 	sendOpenPrivateMessage = (receiver) =>{
 		const{ socket, user} = this.props;
-		socket.emit(PRIVATE_MESSAGE, {receiver, sender: user.name})
+		const {activeChat } = this.state;
+		socket.emit(PRIVATE_MESSAGE, {receiver, sender: user.name, activeChat})
 	}
   /*
 	*	Reset the chat back to only the chat passed in.
@@ -130,13 +152,14 @@ export default class ChatContainer extends Component {
     
   render() {
       const {user, logout} = this.props;
-      const { chats, activeChat } = this.state;
+      const { chats, activeChat, users } = this.state;
     return (
       <div className='container'>
         <SideBar
             logout={logout}
             chats ={chats}
             user = {user}
+						users ={users}
             activeChat={activeChat}
 		      	setActiveChat={this.setActiveChat}
 						onSendPrivateMessage ={this.sendOpenPrivateMessage}

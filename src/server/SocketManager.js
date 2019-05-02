@@ -15,7 +15,7 @@ const {
 const { createUser, createMessage, createChat } = require("../Actions");
 //this var will have key value pair of username , id
 let connectedUsers = {};
-let onlineChat = createChat();
+let onlineChat = createChat({ isOnlineUser:true});
 module.exports = function (socket) {
     console.log("Socket Id : " + socket.id);
 
@@ -36,10 +36,9 @@ module.exports = function (socket) {
         user.socketId = socket.id;
         connectedUsers = addUser(connectedUsers, user);
         socket.user = user;
-
         sendMessageToChatFromUser = sendMessageToChat(user.name);
         sendTypingFromUser = sendTypingToChat(user.name);
-        //broadcast to all the users connected
+        //broadcast to all the users connected and send user objects
         io.emit(USER_CONNECTED, connectedUsers);
         console.log(connectedUsers);
     });
@@ -75,13 +74,19 @@ module.exports = function (socket) {
         sendTypingFromUser(chatId, isTyping);
     });
 
-    socket.on(PRIVATE_MESSAGE,({receiver, sender})=>{
+    socket.on(PRIVATE_MESSAGE,({receiver, sender, activeChat})=>{
         //console.log(receiver, sender);
+        
         if(receiver in connectedUsers){
-            const newChat = createChat({name:`${receiver}&${sender}`, users:[receiver,sender]})
             const receiverSocket = connectedUsers[receiver].socketId;
+            if(activeChat === null || activeChat.id === onlineChat.id){
+            const newChat = createChat({name:`${receiver} & ${sender}`, users:[receiver,sender]})            
             socket.to(receiverSocket).emit(PRIVATE_MESSAGE, newChat);
             socket.emit(PRIVATE_MESSAGE, newChat);
+            }else
+            {
+                socket.to(receiverSocket).emit(PRIVATE_MESSAGE, activeChat)
+            }
         }
     })
 };
