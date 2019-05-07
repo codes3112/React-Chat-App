@@ -8,4 +8,5 @@ module.exports = {
     VERIFY_USER: "VERIFY_USER",
     LOGOUT: "LOGOUT",
     PRIVATE_MESSAGE: 'PRIVATE_MESSAGE'
+    
 };

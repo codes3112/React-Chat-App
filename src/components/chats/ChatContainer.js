@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SideBar from '../sidebar/SideBar';
 import {ONLINE_CHAT, MESSAGE_SENT, MESSAGE_RECEIVED, TYPING, 
-			  PRIVATE_MESSAGE, USER_CONNECTED, USER_DISCONNECTED} from '../../Events';
+			  PRIVATE_MESSAGE, USER_CONNECTED, USER_DISCONNECTED } from '../../Events';
 import ChatHeading from './ChatHeading'
 import Messages from '../messages/Messages'
 import MessageInput from '../messages/MessageInput'
@@ -28,10 +28,12 @@ export default class ChatContainer extends Component {
 		socket.off(PRIVATE_MESSAGE);
 		socket.off(USER_CONNECTED);
 		socket.off(USER_DISCONNECTED);
+		//socket.off(this.NEW_CHAT_USER)
 	}
 
+
 	// initialize the socket
-	
+
   initSocket(socket){
 		
 		socket.emit(ONLINE_CHAT, this.resetChat);
@@ -44,9 +46,10 @@ export default class ChatContainer extends Component {
 			this.setState({ users:values(users) });
 		})
 		socket.on(USER_DISCONNECTED, (users) =>{
+			
 			this.setState({ users:values(users) });
 		})
-		
+		// socket.on(NEW_CHAT_USER, this.addUserToChat)
 	}
 	//send open private message
 	sendOpenPrivateMessage = (receiver) =>{
@@ -54,6 +57,9 @@ export default class ChatContainer extends Component {
 		const {activeChat } = this.state;
 		socket.emit(PRIVATE_MESSAGE, {receiver, sender: user.name, activeChat})
 	}
+
+	
+
   /*
 	*	Reset the chat back to only the chat passed in.
 	* 	@param chat {Chat}
@@ -155,7 +161,14 @@ export default class ChatContainer extends Component {
       const { chats, activeChat, users } = this.state;
     return (
       <div className='container'>
-        <SideBar
+        
+       <div className="chat-room-container">
+					{
+						activeChat !== null ? (
+
+							<div className="chat-room">
+								<ChatHeading name={activeChat.name} />
+								<SideBar
             logout={logout}
             chats ={chats}
             user = {user}
@@ -164,12 +177,6 @@ export default class ChatContainer extends Component {
 		      	setActiveChat={this.setActiveChat}
 						onSendPrivateMessage ={this.sendOpenPrivateMessage}
 					/>
-       <div className="chat-room-container">
-					{
-						activeChat !== null ? (
-
-							<div className="chat-room">
-								<ChatHeading name={activeChat.name} />
 								<Messages 
 									messages={activeChat.messages}
 									user={user}

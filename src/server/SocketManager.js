@@ -9,7 +9,8 @@ const {
     MESSAGE_RECEIVED,
     MESSAGE_SENT,
     TYPING,
-    PRIVATE_MESSAGE
+    PRIVATE_MESSAGE,
+    
 } = require("../Events");
 
 const { createUser, createMessage, createChat } = require("../Actions");

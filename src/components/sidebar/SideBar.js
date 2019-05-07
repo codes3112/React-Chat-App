@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { SideBarOption } from './SideBarOption';
 import { last, get, differenceBy } from 'lodash';
 import { createChatNameFromUsers } from '../../Actions'
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 
 //import { FAChevronDown } from 'react-icons/md/keyboard-arrow-down';
 // import { FAMenu } from 'react-icons/lib/fa/list-ul';
@@ -9,13 +10,29 @@ import { createChatNameFromUsers } from '../../Actions'
 // import { MdEject } from 'react-icons/lib/md/eject';
 
 export default class SideBar extends Component {
+	constructor(props) {
+		super(props);
+	
+		this.toggleNavbar = this.toggleNavbar.bind(this);
+		this.state = {
+		  collapsed: true,
+		  receiver: '',
+		  activeSideBar: SideBar.type.CHATS
+		};
+	  }
 	static type = {
 		CHATS: 'chats',
 		USERS: 'users'
 	}
-	state = {
-		receiver: '',
-		activeSideBar: SideBar.type.CHATS
+	// state = {
+	// 	receiver: '',
+	// 	activeSideBar: SideBar.type.CHATS
+	// }
+	
+	toggleNavbar() {
+		this.setState({
+		  collapsed: !this.state.collapsed
+		});
 	}
 
 	handleSubmit = (e) => {
@@ -29,7 +46,7 @@ export default class SideBar extends Component {
 
 	addChatForUser = (username) => {
 		this.setActiveSideBar(SideBar.type.CHATS)
-		this.props.onSendPrivateMessage( username );
+		this.props.onSendPrivateMessage(username);
 	}
 
 	setActiveSideBar = (newSideBar) => {
@@ -40,31 +57,30 @@ export default class SideBar extends Component {
 		const { chats, activeChat, user, setActiveChat, logout, users } = this.props
 		const { receiver, activeSideBar } = this.state;
 		return (
-			<div id="side-bar">
-				<div className="heading">
-					<div className="app-name">My_Chat_App
-						{/* <FAChevronDown /> */}
-					</div>
-					<div className="menu">
-						{/* <FAMenu /> */}
-					</div>
-				</div>
-				<form onSubmit={this.handleSubmit} className="search">
-					<i className="search-icon">
-						{/* <FASearch /> */}
-					</i>
-					<input
-						placeholder="Search"
-						type="text"
-						value={receiver}
-						onChange={(e) => { this.setState({ receiver: e.target.value }) }} />
-					<div className="plus"></div>
-				</form>
-
-				<div className='side-bar-select'>
+			<div>
+			<Navbar  light>
+          		<NavbarBrand href="/" className="mr-auto">Chat Rooms</NavbarBrand>
+          			<NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
+         				 <Collapse isOpen={!this.state.collapsed} navbar>
+            				<Nav navbar>
+							<NavItem>
+							<form onSubmit={this.handleSubmit} >
+								<i className="search-icon">
+									{/* <FASearch /> */}
+								</i>
+								<input
+									placeholder="Search"
+									type="text"
+									value={receiver}
+									onChange={(e) => { this.setState({ receiver: e.target.value }) }} />
+								{/* <div className="plus"></div> */}
+							</form>
+							</NavItem>
+				<NavItem>
+				<div className='side-bar-select' style={{width:"100%"}}>
 					<div
 						onClick={() => { this.setActiveSideBar(SideBar.type.CHATS) }}
-						className={`side-bar-select__option ${activeSideBar === SideBar.type.CHATS}` }>
+						className={`side-bar-select__option ${activeSideBar === SideBar.type.CHATS}`}>
 						<span>OnlineChats</span>
 					</div>
 
@@ -75,48 +91,55 @@ export default class SideBar extends Component {
 					</div>
 
 				</div>
-
-				<div 
-						className="users" 
-						ref='users' 
-						onClick={(e)=>{ (e.target === this.refs.user) && setActiveChat(null) }}>
-						
-						{
+				</NavItem>
+				<NavItem>
+				<div
+					className="side-bar-select" style={{width:"100%", textAlign:"left"}}
+					ref='users'
+					onClick={(e) => { (e.target === this.refs.user) && setActiveChat(null) }}>
+					
+					{
 						activeSideBar === SideBar.type.CHATS ?
-						chats.map((chat)=>{
-							if(chat.name){
-								return(
-								<SideBarOption 
-									key = {chat.id}
-									lastMessage = { get(last(chat.messages), 'message', '') }
-									name = { chat.isOnlineUser ? chat.name : createChatNameFromUsers(chat.users, user.name) }
-									active = { activeChat.id === chat.id }
-									onClick = { ()=>{ this.props.setActiveChat(chat) } }
-								/>
+							chats && chats.map((chat) => {
+								return (
+									<SideBarOption
+										key={chat.id}
+										lastMessage={get(last(chat.messages), 'message', '')}
+										name={chat.isOnlineUser ? chat.name : createChatNameFromUsers(chat.users, user.name)}
+										active={activeChat.id === chat.id}
+										onClick={() => { this.props.setActiveChat(chat) }}
+									/>
 								)
-							}
-								return null
-						})	
-						
-						
-						:
-							differenceBy(users, [user], 'name').map((otherUser)=>{
-								return <SideBarOption 
-									key = { otherUser.id }
-									name = { otherUser.name }
-									onClick = { ()=>{ this.addChatForUser(otherUser.name) }  }
+							})
+
+							:
+							differenceBy(users, [user], 'name').map((otherUser) => {
+								return <SideBarOption
+									key={otherUser.id}
+									name={otherUser.name}
+									onClick={() => { this.addChatForUser(otherUser.name) }}
 								/>
 							})
-						}
-					</div>
-					<div className="current-user">
-						<span>{user.name}</span>
-						<div onClick={()=>{logout()}} title="Logout">Logout
+					}
+				</div>
+				</NavItem>
+				<NavItem>
+				<div className="side-bar-select" style={{width:"100%", textAlign:"left"}}>
+					<span>{user.name}</span>
+					<div onClick={() => { logout() }} title="Logout" >Logout
 							{/* <MdEject/>	 */}
-						</div>
 					</div>
-			</div>
+				</div>
+				</NavItem>
+
+				</Nav>
+          </Collapse>
+        </Navbar>
+      </div>
 		);
-	
+
 	}
 }
+
+
+
