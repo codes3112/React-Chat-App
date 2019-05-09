@@ -5,8 +5,7 @@ import LoginForm from './LoginForm';
 import ChatContainer from './chats/ChatContainer';
 
 
-// const socketUrl = 'http://10.5.143.17:4000'
-const socketUrl = '/'
+const socketUrl = 'http://localhost:4000'
 export default class Layout extends Component {
     constructor(props) {
         super(props);
@@ -26,24 +25,26 @@ export default class Layout extends Component {
     initSocket = () => {
         const socket = io(socketUrl)
         socket.on('connect', () => {
-            if(this.state.user){
+            if (this.state.user) {
                 this.reconnect(socket)
-            }else{
+            } else {
                 console.log('Connected');
             }
-            
+
         })
         this.setState({ socket });
     }
-    reconnect =(socket) =>{
-        socket.emit(VERIFY_USER, this.state.name, ({isUser, user}) =>{
-        if(isUser){
-            this.setState( {user:null})
-        } else{
-            this.setUser(user)
-        }
+
+    reconnect = (socket) => {
+        socket.emit(VERIFY_USER, this.state.user.name, ({ isUser, user }) => {
+            if (isUser) {
+                this.setState({ user: null })
+            } else {
+                this.setState(user)
+            }
         })
     }
+	
     //Set the user property in state
     //@param user{id:number, name:string}
     setUser = (user) => {
