@@ -1,4 +1,5 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This Chat App is created using React framework and uses Socket.io for real time bi-directional communication between users.
 
 ## Available Scripts
 
@@ -22,5 +23,5 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-This Chat App is created using React framework and uses Socket.io for real time bi-directional communication between users. 
+ 
 
